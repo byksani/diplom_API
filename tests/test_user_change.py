@@ -3,7 +3,7 @@ import allure
 
 
 class TestChangeUser:
-    @allure.story("Изменение имени и email авторизованного пользователя")
+    @allure.step("Изменение имени и email авторизованного пользователя")
     @pytest.mark.parametrize('field, new_value', [
         ('email', 'updated_email@yandex.ru'),
         ('name', 'UpdatedName')
@@ -16,10 +16,13 @@ class TestChangeUser:
 
         status_code, response_context = auth_methods.change_user(token, payload)
 
-        assert status_code == 200 and response_context['user'][field] == new_value, \
-            f"Ожидался статус 200 и что {field} теперь содержит {new_value}, а получили статус {status_code} и ответ: {response_context}"
+        assert status_code == 200, \
+            f"Ожидался статус 200, а получили статус {status_code}."
 
-    @allure.story("Изменение пароля авторизованного пользователя")
+        assert response_context['user'][field] == new_value, \
+            f"Ожидалось что {field} теперь содержит {new_value}, а получили ответ: {response_context}"
+
+    @allure.step("Изменение пароля авторизованного пользователя")
     def test_change_user_password_success(self, auth_methods, created_user):
         _, response_context = created_user
         token = response_context['accessToken']
@@ -28,10 +31,13 @@ class TestChangeUser:
 
         status_code, response_context = auth_methods.change_user(token, payload)
 
-        assert status_code == 200 and response_context['success'] == True, \
-            f"Ожидался статус 200 и success=True, а получили статус {status_code} и ответ: {response_context}"
+        assert status_code == 200, \
+            f"Ожидался статус 200, а получили статус {status_code}."
 
-    @allure.story("Попытка изменения данных пользователя без авторизации")
+        assert response_context['success'] == True, \
+            f"Ожидался success=True, а получили: {response_context}"
+
+    @allure.step("Попытка изменения данных пользователя без авторизации")
     @pytest.mark.parametrize('field, new_value', [
         ('email', 'updated_email@yandex.ru'),
         ('password', 'new_password123'),
@@ -42,5 +48,8 @@ class TestChangeUser:
 
         status_code, response_context = auth_methods.change_user('', payload)
 
-        assert status_code == 401 and response_context['success'] == False, \
-            f"Ожидался статус 401 и success=False, а получили статус {status_code} и ответ: {response_context}"
+        assert status_code == 401, \
+            f"Ожидался статус 401, а получили статус {status_code}."
+
+        assert response_context['success'] == False, \
+            f"Ожидался success=False, а получили: {response_context}"

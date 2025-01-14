@@ -1,28 +1,28 @@
 import requests
 import allure
 
-from data import ORDERS
+from data import Urls
 
 
 class OrderMethods:
-    @allure.story("Создание заказа")
+    @allure.step("Создание заказа")
     def create_order(self, token, payload):
         response = requests.post(
-            ORDERS,
+            Urls.ORDERS,
             json=payload,
             headers={'Authorization': token}
         )
 
         if response.status_code == 500:
-            return response.status_code
+            return response.status_code, None
 
         else:
             return response.status_code, response.json()
 
-    @allure.story("Получение списка заказов")
+    @allure.step("Получение списка заказов")
     def get_order_list(self, token):
         response = requests.get(
-            ORDERS,
+            Urls.ORDERS,
             headers={'Authorization': token}
         )
 

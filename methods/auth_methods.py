@@ -1,33 +1,33 @@
 import requests
 import allure
 
-from data import REGISTER, LOGIN, USER
+from data import Urls
 
 
 class AuthMethods:
-    @allure.story("Создание пользователя")
+    @allure.step("Создание пользователя")
     def create_user(self, payload):
-        response = requests.post(REGISTER, json=payload)
+        response = requests.post(Urls.REGISTER, json=payload)
         return response.status_code, response.json()
 
-    @allure.story("Логин пользователя")
+    @allure.step("Логин пользователя")
     def login_user(self, payload):
-        response = requests.post(LOGIN, json=payload)
+        response = requests.post(Urls.LOGIN, json=payload)
         return response.status_code, response.json()
 
-    @allure.story("Изменение данных пользователя")
+    @allure.step("Изменение данных пользователя")
     def change_user(self, token, payload):
         response = requests.patch(
-            USER,
+            Urls.USER,
             headers={'Authorization': token},
             json=payload
         )
         return response.status_code, response.json()
 
-    @allure.story("Удаление пользователя")
+    @allure.step("Удаление пользователя")
     def delete_user(self, token):
         response = requests.delete(
-            USER,
+            Urls.USER,
             headers={'Authorization': token}
         )
         return response.status_code, response.json()

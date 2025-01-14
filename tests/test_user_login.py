@@ -1,15 +1,21 @@
 import pytest
 import allure
 
+from data import SystemMessages
+
 
 class TestLoginUser:
-    @allure.story("Логин уже зарегистрированного пользователя")
+    @allure.step("Логин уже зарегистрированного пользователя")
     def test_login_already_created_user_success(self, logged_in_user):
         status_code, response_context = logged_in_user
-        assert status_code == 200 and response_context['success'] == True, \
-            f"Ожидался статус 200 и success=True, а получили статус {status_code} и ответ: {response_context}"
 
-    @allure.story("Логин с неверными данными")
+        assert status_code == 200, \
+            f"Ожидался статус 200, а получили статус {status_code}."
+
+        assert response_context['success'] == True, \
+            f"Ожидался success=True, а получили ответ: {response_context}"
+
+    @allure.step("Логин с неверными данными")
     @pytest.mark.parametrize('email, password', [
         ('nonexistent_user@example.com', 'wrongpassword123'),
         ('', 'password123'),
@@ -19,5 +25,8 @@ class TestLoginUser:
         payload = {'email': email, 'password': password}
         status_code, response_context = auth_methods.login_user(payload)
 
-        assert status_code == 401 and response_context['message'] == 'email or password are incorrect', \
-            f"Ожидался статус 401 и сообщение 'email or password are incorrect', а получили статус {status_code} и ответ: {response_context}"
+        assert status_code == 401, \
+            f"Ожидался статус 401, а получили статус {status_code}."
+
+        assert response_context['message'] == SystemMessages.INVALID_EMAIL_OR_PASSWORD, \
+            f"Ожидалось сообщение {SystemMessages.INVALID_EMAIL_OR_PASSWORD}, а получили ответ: {response_context}"
