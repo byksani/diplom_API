@@ -5,7 +5,7 @@ from data import SystemMessages
 
 
 class TestLoginUser:
-    @allure.step("Логин уже зарегистрированного пользователя")
+    @allure.title("Логин уже зарегистрированного пользователя")
     def test_login_already_created_user_success(self, logged_in_user):
         status_code, response_context = logged_in_user
 
@@ -15,7 +15,7 @@ class TestLoginUser:
         assert response_context['success'] == True, \
             f"Ожидался success=True, а получили ответ: {response_context}"
 
-    @allure.step("Логин с неверными данными")
+    @allure.title("Логин с неверными данными")
     @pytest.mark.parametrize('email, password', [
         ('nonexistent_user@example.com', 'wrongpassword123'),
         ('', 'password123'),

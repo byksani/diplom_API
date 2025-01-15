@@ -4,7 +4,7 @@ from data import SystemMessages
 
 
 class TestGetOrders:
-    @allure.step("Получение заказов авторизованного пользователя")
+    @allure.title("Получение заказов авторизованного пользователя")
     def test_get_orders_for_user_success(self, create_order_for_user, created_user, order_methods):
         _, response_context = created_user
         token = response_context['accessToken']
@@ -17,7 +17,7 @@ class TestGetOrders:
         assert len(response_context['orders']) == 1, \
             f"Ожидался только один заказ, а получено {len(response_context['orders'])}"
 
-    @allure.step("Получение заказов неавторизованного пользователя")
+    @allure.title("Получение заказов неавторизованного пользователя")
     def test_get_orders_for_user_without_auth_error(self, create_order_for_user, order_methods):
         status_code, response_context = order_methods.get_order_list('')
 

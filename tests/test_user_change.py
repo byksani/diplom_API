@@ -3,7 +3,7 @@ import allure
 
 
 class TestChangeUser:
-    @allure.step("Изменение имени и email авторизованного пользователя")
+    @allure.title("Изменение имени и email авторизованного пользователя")
     @pytest.mark.parametrize('field, new_value', [
         ('email', 'updated_email@yandex.ru'),
         ('name', 'UpdatedName')
@@ -22,7 +22,7 @@ class TestChangeUser:
         assert response_context['user'][field] == new_value, \
             f"Ожидалось что {field} теперь содержит {new_value}, а получили ответ: {response_context}"
 
-    @allure.step("Изменение пароля авторизованного пользователя")
+    @allure.title("Изменение пароля авторизованного пользователя")
     def test_change_user_password_success(self, auth_methods, created_user):
         _, response_context = created_user
         token = response_context['accessToken']
@@ -37,7 +37,7 @@ class TestChangeUser:
         assert response_context['success'] == True, \
             f"Ожидался success=True, а получили: {response_context}"
 
-    @allure.step("Попытка изменения данных пользователя без авторизации")
+    @allure.title("Попытка изменения данных пользователя без авторизации")
     @pytest.mark.parametrize('field, new_value', [
         ('email', 'updated_email@yandex.ru'),
         ('password', 'new_password123'),
